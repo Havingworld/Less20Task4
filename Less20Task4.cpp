@@ -103,6 +103,8 @@ int main()
 
         //cash.close();
         cout << endl <<  "input ""-1"" for exit" << endl;
+ 
+        readcash(money);
 
         while(nInput != -1)
         {
@@ -117,8 +119,7 @@ int main()
             int bill_temp = 0;
 
             if (nInput < 0)
-            {
-                readcash(money);
+            {        
 
                 nInput = abs(nInput);
 
@@ -156,14 +157,12 @@ int main()
                             if (money[n] == bill[i])
                             {
                                 bill_temp += bill[i];
-                                bill[i] = 0;
+                                money[n] = 0;
                             }
                         }
 
                     }
                 }
-
-                writecash(money);
 
                 cout << endl << "take cash: " << bill;
                 //если нет крупных купюр, выдать более мелкими
@@ -172,8 +171,6 @@ int main()
             }
             else if(nInput > 0)
             {
-                readcash(money);
-
 
                 for (int i = 0; i < money.size(); ++i)
                 {
@@ -183,13 +180,12 @@ int main()
                         bill_temp += money[i];
                     }
                 }
-                
-                writecash(money);
 
                 cout << endl << "added cash: " << bill_temp;
 
             }
-            
+
+            writecash(money);
         }
     //}
     //else
