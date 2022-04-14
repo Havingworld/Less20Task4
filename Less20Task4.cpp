@@ -45,7 +45,7 @@ int main()
         {
             cash.write((char*)&money[i], sizeof(money[i]));
         }        
-        
+
     //}
     //else
     //{
@@ -56,14 +56,15 @@ int main()
     //cash.close();
 
         vector <int> in_cash;  //cash inside cash.bin
-    
+
+    int in_cash[1000];
     //read input cash.bin
     //ifstream cash("cash.bin");
     //if (cash.is_open())
     //{
         //cash.seekg(0);
         while (!cash.eof())
-        { 
+    {
             int in_read;
             cash >> in_read;
             //cash.read((char*)&in_cash[i], sizeof(int));
@@ -77,4 +78,5 @@ int main()
     }
     cash.close();
   
+
 }
