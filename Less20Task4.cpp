@@ -75,33 +75,13 @@ int main()
     int nInput = 0;
     vector <int> money;
 
-    //fstream cash("cash.bin", fstream::in | fstream::out | ios::binary);
-    ////fstream cash("cash.txt");
-    //if (cash.is_open())
-    //{
     for (int i = 0; i < 1000; ++i)
     {
         money.push_back(bill[rand() % 6]);
     }
 
     writecash(money);
-
-        //for (int i = 0; i < money.size(); ++i)
-        //{
-        //    cash.write((char*)&money[i], sizeof(int));
-        //}
-        
-        vector <int> cash_temp;  //cash inside cash.bin
-
-        //cash.seekg(0);
-        //while (!cash.eof())
-        //{
-        //    int temp;
-        //    cash.read((char*)&temp, sizeof(int));
-        //    in_cash.push_back(temp);
-        //}
-
-        //cash.close();
+       
         cout << endl <<  "input ""-1"" for exit" << endl;
  
         readcash(money);
@@ -112,10 +92,6 @@ int main()
             cin >> nInput;
             if (nInput % 100) continue;
             
-            //for (int i = 0; i < money.size(); ++i)
-            //{
-            //    money[i];
-            //}
             int bill_temp = 0;
 
             if (nInput < 0)
@@ -130,7 +106,6 @@ int main()
                 // 800 % 500 = 300
                 // 300 % 200 = 100
                 // 100 % 100 = 0
-                //узнать размер файла, если размер больше 0, то чтение, если меньше - заполнить
 
                 int cashwithdrawal[] = { 0, 0, 0, 0, 0, 0 };
 
@@ -144,8 +119,6 @@ int main()
                 }
 
                 //извлечь купюры
-                
-
                 //используя два массива пройти по файлу
                 for (int i = 0; i < 6; ++i)
                 {
@@ -186,12 +159,6 @@ int main()
             }
 
             writecash(money);
-        }
-    //}
-    //else
-    //{
-    //    // show error message
-    //    cout << "error opening cash.bin";
-    //}    
+        } 
 
 }
