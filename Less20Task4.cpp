@@ -25,19 +25,14 @@
 
 using namespace std;
 
-void readcash(vector <int> &money)
+void readcash(vector <int>& money)
 {
     fstream cash("cash.bin", fstream::in | ios::binary);
     //fstream cash("cash.txt");
     if (cash.is_open())
     {
-        //cash.seekg(0);
-        while (!cash.eof())
-        {
-            int temp;
-            cash.read((char*)&temp, sizeof(int));
-            money.push_back(temp);
-        }
+        cash.read((char*)money.data(), money.size() * sizeof(int));
+        
         cash.close();
     }
     else
@@ -53,10 +48,7 @@ void writecash(vector <int> money)
     //fstream cash("cash.txt");
     if (cash.is_open())
     {
-        for (int i = 0; i < money.size(); ++i)
-        {
-            cash.write((char*)&money[i], sizeof(int));
-        }
+        cash.write((char*)money.data(), money.size() * sizeof(int));
 
         cash.close();
     }
@@ -81,84 +73,83 @@ int main()
     }
 
     writecash(money);
-       
-        cout << endl <<  "input ""-1"" for exit" << endl;
- 
-        readcash(money);
 
-        while(nInput != -1)
+    cout << endl << "input ""-1"" for exit" << endl;
+
+    readcash(money);
+
+    while (nInput != -1)
+    {
+        cout << endl << "input sum multiple of 100: ";
+        cin >> nInput;
+        if (nInput % 100) continue;
+
+        int bill_temp = 0;
+
+        if (nInput < 0)
         {
-            cout << endl << "input sum multiple of 100: ";
-            cin >> nInput;
-            if (nInput % 100) continue;
-            
-            int bill_temp = 0;
 
-            if (nInput < 0)
-            {        
+            nInput = abs(nInput);
 
-                nInput = abs(nInput);
+            //Разложить запрос на купюры
+            // 8800 % 5000 = 3800
+            // 3800 % 2000 = 1800
+            // 1800 % 1000 = 800
+            // 800 % 500 = 300
+            // 300 % 200 = 100
+            // 100 % 100 = 0
 
-                //Разложить запрос на купюры
-                // 8800 % 5000 = 3800
-                // 3800 % 2000 = 1800
-                // 1800 % 1000 = 800
-                // 800 % 500 = 300
-                // 300 % 200 = 100
-                // 100 % 100 = 0
+            int cashwithdrawal[] = { 0, 0, 0, 0, 0, 0 };
 
-                int cashwithdrawal[] = { 0, 0, 0, 0, 0, 0 };
-
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (nInput % bill[i])   //может не работает на 100
-                    {
-                        cashwithdrawal[i] = nInput / bill[i];
-                        nInput = nInput % bill[i];
-                    }
-                }
-
-                //извлечь купюры
-                //используя два массива пройти по файлу
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (cashwithdrawal[i] > 0) {
-
-
-                        for (int n = 0; n < money.size(); ++n)
-                        {
-                            if (money[n] == bill[i])
-                            {
-                                bill_temp += bill[i];
-                                money[n] = 0;
-                            }
-                        }
-
-                    }
-                }
-
-                cout << endl << "take cash: " << bill;
-                //если нет крупных купюр, выдать более мелкими
-                // 
-                //вывести купюры на экран
-            }
-            else if(nInput > 0)
+            for (int i = 0; i < 6; ++i)
             {
-
-                for (int i = 0; i < money.size(); ++i)
-                {
-                    if (money[i] == 0)
-                    {
-                        money[i] = bill[rand() % 6];
-                        bill_temp += money[i];
-                    }
-                }
-
-                cout << endl << "added cash: " << bill_temp;
-
+                //if (nInput % bill[i])   //может не работает на 100
+                //{
+                    cashwithdrawal[i] = nInput / bill[i];
+                    nInput = nInput % bill[i];
+                //}
             }
 
-            writecash(money);
-        } 
+            //извлечь купюры
+            //используя два массива пройти по файлу
+            for (int i = 0; i < 6; ++i)
+            {
+                //if (cashwithdrawal[i] > 0) {
+                    for (int n = 0; n < money.size(); ++n)
+                    {
+                        if (cashwithdrawal[i] == 0) break;
+                        if (money[n] == bill[i])
+                        {
+                            bill_temp += bill[i];
+                            money[n] = 0;
+                            cashwithdrawal[i] -= 1;
+                        }                       
+                    }
+               // }
+            }
+
+            cout << endl << "take cash: " << bill_temp;
+            //если нет крупных купюр, выдать более мелкими
+            // 
+            //вывести купюры на экран
+        }
+        else if (nInput > 0)
+        {
+
+            for (int i = 0; i < money.size(); ++i)
+            {
+                if (money[i] == 0)
+                {
+                    money[i] = bill[rand() % 6];
+                    bill_temp += money[i];
+                }
+            }
+
+            cout << endl << "added cash: " << bill_temp;
+
+        }
+
+        writecash(money);
+    }
 
 }
